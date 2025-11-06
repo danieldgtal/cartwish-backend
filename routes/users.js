@@ -40,8 +40,16 @@ router.post("/signup", upload.single("profilePic"), async (req, res) => {
     const { name, email, password, deliveryAddress } = req.body;
 
     try {
+        // Validate required fields
+        if (!name || !email || !password || !deliveryAddress) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // Normalize email (trim and lowercase)
+        const normalizedEmail = email.trim().toLowerCase();
+        
         // Check if the email is already registered
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ email: normalizedEmail });
         if (user) {
             // Delete the uploaded file since the API was not successful
             if (req.file) {
@@ -56,10 +64,10 @@ router.post("/signup", upload.single("profilePic"), async (req, res) => {
 
         // Create the new user
         user = new User({
-            name,
-            email,
+            name: name.trim(),
+            email: normalizedEmail,
             password,
-            deliveryAddress,
+            deliveryAddress: deliveryAddress.trim(),
             profilePic: req.file ? req.filename : "default.jpg",
         });
 
