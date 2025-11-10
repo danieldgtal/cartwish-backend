@@ -5,7 +5,7 @@ require("dotenv").config();
 require("./db/connectDB");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // import routes
 const userRoutes = require("./routes/users");
@@ -30,5 +30,5 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on PORT: ${PORT}`);
+	console.log(`Server is running on PORT: ${PORT}`);
 });
